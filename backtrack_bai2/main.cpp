@@ -11,10 +11,10 @@
 using namespace std;
 
 int arr[1011];
-bool picked[1011]; // true if the element is picked into subset, false otherwise
 int n; // number of elements in array, n <= 10;
-int k; // k lines of output, k subsets, 1 < k < n;
-vector<vector<int>> binaryProfiles;
+int k; // sum
+int profile[1011];
+vector< vector<int> > mySolutions;
 
 void inputVariables(){
     cin >> n >> k;
@@ -27,41 +27,62 @@ void inputArray(){
 
 void printArray(){
     for (int i=1; i<=n; i++){
-        cout << arr[i];
+        cout << arr[i] << " ";
     }
     cout << endl;
 }
 
-void pushToVector(vector<int> vec){
+void checkSolution(int profile[]){
+    int sum = 0;
     for (int i=1; i<=n; i++){
-        vec.push_back(arr[i]);
+        if (profile[i] == 1) {
+            sum += arr[i];
+        }
     }
-    for (int i=1; i<=n; i++){
-        cout << vec[i];
+    if (sum == k){
+        vector<int> solution;
+        for (int i=1; i<=n; i++){
+            if (profile[i] == 1){
+                solution.push_back(arr[i]);
+            }
+        }
+        mySolutions.push_back(solution);
     }
-    cout << endl;
-    binaryProfiles.push_back(vec);
 }
 
-// generate all possible binary profiles
+// generate all possible binary profiles and check if a solution is feasible
 void generateBinaryProfiles(int pos){
+    // backtrack algorithm
     for (int i=0; i<=1; i++){
-        arr[pos] = i;
+        profile[pos] = i;
         if (pos == n){
-            vector<int> temporaryVector;
-            pushToVector(temporaryVector);
+            checkSolution(profile);
         } else {
             generateBinaryProfiles(pos+1);
         }
     }
 }
 
+void printSolutions(){
+    int numberOfSolutions = mySolutions.size();
+    if (numberOfSolutions > 0) {
+        cout << "There are: " << numberOfSolutions << " solution(s)." <<  endl;
+        for (int i=0; i<numberOfSolutions; i++){
+            for (unsigned int j=0; j<mySolutions[i].size(); j++){
+                cout << mySolutions[i][j] << " ";
+            }
+            cout << endl;
+        }
+    } else {
+        cout << "There is no solution." << endl;
+    }
+}
+
 int main()
 {
-    //cout << "Hello world!" << endl;
     inputVariables();
     inputArray();
-    //printArray();
     generateBinaryProfiles(1);
+    printSolutions();
     return 0;
 }

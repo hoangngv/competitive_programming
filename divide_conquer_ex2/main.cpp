@@ -49,7 +49,7 @@ int countUsingBinarySearch(int arr[], int n, int x){
     theFirstSeenIndex = first(arr, 0, n-1, x, n); // the first index found
     if (theFirstSeenIndex == -1) return theFirstSeenIndex;
     theLastSeenIndex = last(arr, theFirstSeenIndex, n-1, x, n); // find the last index from the first index to n
-    return (theFirstSeenIndex-theFirstSeenIndex+1);
+    return (theLastSeenIndex-theFirstSeenIndex+1);
 }
 
 int main()

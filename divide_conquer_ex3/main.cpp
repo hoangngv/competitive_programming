@@ -39,13 +39,65 @@ Pair getMinMax(int arr[], int n){
     return minMax;
 };
 
+/* Solution 2: Tournament method
+Idea: divide array into 2 sub-arrays, find minMax (local results) in each sub-array
+and combine to get global results */
+Pair findMinMax(int arr[], int low, int high){
+    Pair minMax, minMaxLeft, minMaxRight;
+
+    /* there is only one element */
+    if (low == high){
+        minMax.min = arr[low];
+        minMax.max = arr[low];
+        return minMax;
+    }
+
+    /* there are 2 elements */
+    if (low+1 == high){
+        if (arr[low] < arr[high]) {
+            minMax.min = arr[low];
+            minMax.max = arr[high];
+        } else {
+            minMax.min = arr[high];
+            minMax.max = arr[low];
+        }
+        return minMax;
+    }
+
+    /* there are more than 2 elements */
+    int mid = (low + high)/2;
+    minMaxLeft = findMinMax(arr, low, mid);
+    minMaxRight = findMinMax(arr, mid+1, high);
+
+    /* compare */
+    if (minMaxLeft.min < minMaxRight.min)
+        minMax.min = minMaxLeft.min;
+    else
+        minMax.min = minMaxRight.min;
+
+    if (minMaxLeft.max > minMaxRight.max)
+        minMax.max = minMaxLeft.max;
+    else
+        minMax.max = minMaxRight.max;
+
+    return minMax;
+}
+
 int main()
 {
-    //cout << "Hello world!" << endl;
     int arr[] = {1000, 11, 445, 1, 330, 3000};
     int n = sizeof(arr)/sizeof(arr[0]);
+
     Pair minMax = getMinMax(arr, n);
+    Pair minMax2 = findMinMax(arr, 0, n-1);
+
+    cout << "Solution 1:" << endl;
     cout << "The minimum element is  " << minMax.min << endl;
     cout << "The maximum element is  " << minMax.max << endl;
+
+    cout << "Solution 2:" << endl;
+    cout << "The minimum element is  " << minMax2.min << endl;
+    cout << "The maximum element is  " << minMax2.max << endl;
+
     return 0;
 }
